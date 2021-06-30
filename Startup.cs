@@ -2,25 +2,16 @@ using BlazorAuth.Areas.Identity;
 using BlazorAuth.Data;
 using DevExpress.AspNetCore;
 using DevExpress.DashboardAspNetCore;
-using DevExpress.DashboardCommon;
 using DevExpress.DashboardWeb;
-using DevExpress.DataAccess.Json;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlazorAuth {
     public class Startup {
@@ -42,24 +33,10 @@ namespace BlazorAuth {
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDevExpressControls();
             services.AddRazorPages();
-                        /*.AddDefaultDashboardController(configurator => {
-                             // Register Dashboard Storage
-                             configurator.SetDashboardStorage(new DashboardFileStorage(FileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath));
-                             // Create a sample JSON data source
-                             DataSourceInMemoryStorage dataSourceStorage = new DataSourceInMemoryStorage();
-                             DashboardJsonDataSource jsonDataSourceUrl = new DashboardJsonDataSource("JSON Data Source (URL)");
-                             jsonDataSourceUrl.JsonSource = new UriJsonSource(
-                                     new Uri("https://raw.githubusercontent.com/DevExpress-Examples/DataSources/master/JSON/customers.json"));
-                             jsonDataSourceUrl.RootElement = "Customers";
-                             dataSourceStorage.RegisterDataSource("jsonDataSourceUrl", jsonDataSourceUrl.SaveToXml());
-                             configurator.SetDataSourceStorage(dataSourceStorage);
-                         });*/
-
 
             services.AddHttpContextAccessor();
 
             services.AddSingleton<DashboardConfigurator, MultiTenantDashboardConfigurator>();
-
 
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();

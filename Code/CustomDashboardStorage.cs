@@ -48,7 +48,7 @@ namespace BlazorAuth {
             var userName = identityName?.Substring(0, identityName.IndexOf("@"));
 
 
-            if (string.IsNullOrEmpty(userName) || userName != "Admin")
+            if (string.IsNullOrEmpty(userName) || userName != "admin")
                 throw new System.ApplicationException("You are not authorized to add dashboards.");
 
             var path = Path.Combine(dashboardStorageFolder, dashboardName + "_" + userName + ".xml");
@@ -62,7 +62,7 @@ namespace BlazorAuth {
             var identityName = contextAccessor.HttpContext.User.Identity.Name;
             var userName = identityName?.Substring(0, identityName.IndexOf("@"));
 
-            if (string.IsNullOrEmpty(userName) || userName != "Admin")
+            if (string.IsNullOrEmpty(userName) || userName != "admin")
                 throw new System.ApplicationException("You are not authorized to save dashboards.");
 
             var path = Path.Combine(dashboardStorageFolder, dashboardID + ".xml");
