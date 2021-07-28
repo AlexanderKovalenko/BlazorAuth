@@ -1,6 +1,5 @@
 ﻿using DevExpress.DashboardWeb;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,11 +7,11 @@ using System.Xml.Linq;
 
 namespace BlazorAuth {
     public class CustomDashboardStorage : IEditableDashboardStorage {
-        private readonly IHttpContextAccessor contextAccessor;
+        private string userName;
         private string dashboardStorageFolder;
 
-        public CustomDashboardStorage(IWebHostEnvironment hostingEnvironment, IHttpContextAccessor contextAccessor) {
-            this.contextAccessor = contextAccessor;
+        public CustomDashboardStorage(IWebHostEnvironment hostingEnvironment, string userName) {
+            this.userName = userName;
             this.dashboardStorageFolder = hostingEnvironment.ContentRootFileProvider.GetFileInfo("App_Data/Dashboards").PhysicalPath;
         }
 
@@ -23,8 +22,6 @@ namespace BlazorAuth {
 
             foreach (var item in files) {
                 var name = Path.GetFileNameWithoutExtension(item);
-                var identityName = contextAccessor.HttpContext.User.Identity.Name;
-                var userName = identityName?.Substring(0, identityName.IndexOf("@"));
 
                 if (!string.IsNullOrEmpty(userName) && name.EndsWith(userName, System.StringComparison.InvariantCultureIgnoreCase))
                     dashboardInfos.Add(new DashboardInfo() { ID = name, Name = name });
@@ -44,10 +41,6 @@ namespace BlazorAuth {
         }
 
         public string AddDashboard(XDocument dashboard, string dashboardName) {
-            var identityName = contextAccessor.HttpContext.User.Identity.Name;
-            var userName = identityName?.Substring(0, identityName.IndexOf("@"));
-
-
             if (string.IsNullOrEmpty(userName) || userName != "admin")
                 throw new System.ApplicationException("You are not authorized to add dashboards.");
 
@@ -59,9 +52,6 @@ namespace BlazorAuth {
         }
 
         public void SaveDashboard(string dashboardID, XDocument dashboard) {
-            var identityName = contextAccessor.HttpContext.User.Identity.Name;
-            var userName = identityName?.Substring(0, identityName.IndexOf("@"));
-
             if (string.IsNullOrEmpty(userName) || userName != "admin")
                 throw new System.ApplicationException("You are not authorized to save dashboards.");
 
